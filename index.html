@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiHi Time — A Personal Sanctuary</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconify Web Component -->
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    
+    <!-- Data Teman & Kata Sandi -->
+    <script src="friends.js?v=2"></script>
+
+    <!-- Modular CSS Stylesheets -->
+    <link rel="stylesheet" href="public/css/theme.css">
+    <link rel="stylesheet" href="public/css/auth.css">
+    <link rel="stylesheet" href="public/css/navbar.css">
+    <link rel="stylesheet" href="public/css/banner.css">
+    <link rel="stylesheet" href="public/css/playlist.css">
+    <link rel="stylesheet" href="public/css/journey.css">
+    <link rel="stylesheet" href="public/css/polaroid.css">
+    <link rel="stylesheet" href="public/css/player.css">
+    <link rel="stylesheet" href="public/css/modals.css">
+    <link rel="stylesheet" href="public/css/responsive.css">
+</head>
+<body>
+    <!-- Interactive Translucent Bubbles Canvas -->
+    <canvas id="bubbleCanvas" class="bubble-canvas"></canvas>
+
+    <!-- Hidden YouTube Audio Player -->
+    <div id="hiddenYtPlayer" style="display: none; position: absolute; left: -9999px;"></div>
+
+    <!-- 1. GERBANG LOGIN (MODULAR) -->
+        <!-- ================= 1. GERBANG LOGIN BERSIH ================= -->
+        <section id="loginPortal" style="position: relative;">
+            <div style="position: absolute; top: 16px; right: 20px; z-index: 50;">
+                <button class="theme-toggle-btn" onclick="toggleLightDarkMode()" title="Ubah Mode Gelap / Terang">
+                    <iconify-icon icon="solar:moon-bold-duotone" class="themeToggleIcon"></iconify-icon>
+                    <span class="themeToggleText">Mode Gelap</span>
+                </button>
+            </div>
+            <div class="login-box">
+                <div class="ocean-badge">
+                    <iconify-icon icon="solar:lock-keyhole-minimalistic-bold-duotone"></iconify-icon>
+                </div>
+                <div class="ribbon-tag">
+                    <iconify-icon icon="solar:sparkles-bold-duotone"></iconify-icon>
+                    <span>Special Sanctuary</span>
+                </div>
+                <h2 class="login-title">HiHi Time</h2>
+                <p class="login-desc">Masukkan nama panggilan dan token rahasiamu untuk membuka ruang musik & hadiah pribadimu.</p>
+
+                <form id="multiLoginForm">
+                    <div class="input-group">
+                        <iconify-icon icon="solar:user-bold-duotone" class="input-icon"></iconify-icon>
+                        <input type="text" id="usernameInput" class="form-input" placeholder="Nama / Username..." autocomplete="off" required>
+                    </div>
+
+                    <div class="input-group">
+                        <iconify-icon icon="solar:key-square-bold-duotone" class="input-icon"></iconify-icon>
+                        <input type="password" id="passwordInput" class="form-input" placeholder="Token Rahasia..." autocomplete="off" required>
+                        <button type="button" class="toggle-btn" id="togglePasswordBtn" title="Lihat/Sembunyikan">
+                            <iconify-icon icon="solar:eye-closed-bold-duotone" id="eyeIcon"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="login-submit-btn">
+                        <iconify-icon icon="solar:lock-keyhole-minimalistic-bold-duotone"></iconify-icon>
+                        <span>Buka Ruangan ✨</span>
+                    </button>
+                </form>
+
+                <div class="error-alert" id="errorAlert">
+                    <iconify-icon icon="solar:danger-triangle-bold-duotone" style="font-size: 18px;"></iconify-icon>
+                    <span>Nama atau token rahasia belum cocok!</span>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- 2. DASHBOARD SANCTUARY (MODULAR) -->
+    <div class="dashboard-container page-container" id="mainDashboard" style="display: none;">
+<!-- Navigation Header -->
+<header>
+    <!-- Kiri: Brand Logo & Ruang User -->
+    <div class="header-brand-wrap">
+        <div class="brand-symbol">
+            <iconify-icon icon="solar:headphones-round-bold-duotone"></iconify-icon>
+        </div>
+        <div class="brand-text">
+            <h2>HiHi Time</h2>
+            <span id="activeUserLabel">Special Gift</span>
+        </div>
+    </div>
+
+    <!-- Tengah: 3 Tab Navigasi Bersih -->
+    <div class="nav-tabs">
+        <button class="nav-tab-btn active" data-tab="home" onclick="switchTab('home')">
+            <iconify-icon icon="solar:home-smile-bold-duotone"></iconify-icon>
+            <span>Beranda</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="journey" onclick="switchTab('journey')">
+            <iconify-icon icon="solar:stars-minimalistic-bold-duotone"></iconify-icon>
+            <span>The Journey</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="photos" onclick="switchTab('photos')">
+            <iconify-icon icon="solar:gallery-minimalistic-bold-duotone"></iconify-icon>
+            <span>Galeri Polaroid</span>
+        </button>
+    </div>
+
+    <!-- Kanan: Tombol Pengaturan dalam 1 Baris Horizontal -->
+    <div class="header-actions-wrap">
+        <!-- Pilihan Bahasa -->
+        <button class="nav-icon-pill" onclick="cycleLanguage()" title="Ganti Bahasa / Switch Language">
+            <iconify-icon icon="solar:global-bold-duotone"></iconify-icon>
+            <span id="currentLangTag">ID</span>
+        </button>
+        <!-- Toggle Bersih: Terang / Gelap -->
+        <button class="theme-toggle-btn" onclick="toggleLightDarkMode()" title="Ubah Mode Gelap / Terang">
+            <iconify-icon icon="solar:moon-bold-duotone" id="themeToggleIcon" class="themeToggleIcon"></iconify-icon>
+            <span id="themeToggleText" class="themeToggleText">Mode Gelap</span>
+        </button>
+        <!-- Tombol Keluar -->
+        <button class="logout-btn" id="logoutBtn" title="Kunci kembali">
+            <iconify-icon icon="solar:logout-2-bold-duotone"></iconify-icon>
+            <span id="logoutText">Keluar</span>
+        </button>
+    </div>
+</header>
+
+
+        <!-- TAB 1: BERANDA -->
+        <div class="tab-panel active" id="tabHome">
+                <!-- SECTION KOLEKSI PLAYLIST (1 KARTU = 1 PLAYLIST) -->
+                <section class="glass-card home-playlist-section" id="homePlaylistSection">
+                    <div class="section-row-header">
+                        <div class="section-title-wrap">
+                            <div class="playlist-title">
+                                <iconify-icon icon="solar:music-library-2-bold-duotone"></iconify-icon>
+                                <span>Koleksi Playlist Musik</span>
+                            </div>
+                            <span class="sub-caption">Geser ke samping untuk melihat semua playlist favoritmu 🎧</span>
+                        </div>
+                        <div class="section-header-actions">
+                            <span class="pl-count-counter" id="playlistCounterBadge">3 / 8 Playlist</span>
+                            <div class="pl-slider-nav-btns">
+                                <button type="button" class="pl-slider-btn" onclick="scrollPlaylistSlider(-1)" title="Geser ke kiri">
+                                    <iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon>
+                                </button>
+                                <button type="button" class="pl-slider-btn" onclick="scrollPlaylistSlider(1)" title="Geser ke kanan">
+                                    <iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1. TAMPILAN KOLOM-KOLOM PLAYLIST (SAAT TERTUTUP) -->
+                    <div id="playlistColumnsContainer" class="playlist-columns-grid">
+                        <!-- Kartu-kartu Playlist Dimuat di Sini Secara Dinamis -->
+                    </div>
+
+                    <!-- 2. TAMPILAN DERETAN MUSIK DALAM SATU PLAYLIST (SAAT DIBUKA) -->
+                    <div id="playlistExpandedContainer" class="playlist-expanded-box" style="display: none;">
+                        <div class="expanded-header-bar">
+                            <button class="back-close-btn" onclick="closePlaylistDetail()" title="Tutup dan kembali ke daftar playlist">
+                                <iconify-icon icon="solar:arrow-left-bold-duotone"></iconify-icon>
+                                <span>← Tutup & Kembali ke Kolom Playlist</span>
+                            </button>
+                            <button class="add-song-to-pl-btn" onclick="openAddSongModal(currentOpenPlaylistId)">
+                                <iconify-icon icon="solar:add-circle-bold-duotone"></iconify-icon>
+                                <span>+ Tambah Lagu YouTube</span>
+                            </button>
+                        </div>
+
+                        <!-- Banner Info Playlist yang Sedang Terbuka -->
+                        <div class="active-playlist-banner">
+                            <div class="active-pl-cover-box" id="activePlCoverBox">
+                                <img id="activePlCoverImg" src="" alt="Cover Playlist" style="width: 100%; height: 100%; object-fit: cover; border-radius: 14px; display: none;">
+                                <iconify-icon icon="solar:music-note-bold-duotone" id="activePlCoverIcon"></iconify-icon>
+                            </div>
+                            <div class="active-pl-text">
+                                <span class="active-pl-badge" id="activePlBadge">5 LAGU</span>
+                                <h3 class="active-pl-title" id="activePlTitle">Wave to Earth Specials</h3>
+                                <p class="active-pl-desc" id="activePlDesc">Lagu-lagu santai bernuansa ombak & malam tenang 🌊</p>
+                            </div>
+                        </div>
+
+                        <!-- Deretan Musik dalam Playlist ini -->
+                        <ul class="playlist-track-list" id="expandedTrackList">
+                            <!-- Lagu-lagu playlist terisi dinamis -->
+                        </ul>
+
+                        <div style="text-align: center; margin-top: 14px;">
+                            <button class="action-pill-btn outline" onclick="closePlaylistDetail()" style="width: auto; padding: 8px 24px;">
+                                <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                                <span>Tutup Daftar Musik ✕</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION DUA KOLOM DI BAWAH PLAYLIST (CATATAN & FOTO) -->
+                <div class="home-bottom-grid">
+                    <!-- Kolom Kiri: Catatan & Surat Spesial (The Journey Preview) -->
+                    <div class="glass-card home-card-column">
+                        <div class="column-card-header">
+                            <div class="playlist-title">
+                                <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon>
+                                <span>Surat & The Journey ✨</span>
+                            </div>
+                            <button class="view-more-link" onclick="switchTab('journey')">
+                                <span>Lihat Selengkapnya</span>
+                                <iconify-icon icon="solar:arrow-right-up-bold-duotone"></iconify-icon>
+                            </button>
+                        </div>
+
+                        <!-- Kartu Kutipan Surat -->
+                        <div class="home-letter-quote" id="homeLetterPreview">
+                            <iconify-icon icon="solar:quote-up-bold-duotone" class="quote-watermark"></iconify-icon>
+                            <p id="homeLetterSnippet">"Selamat ulang tahun ya! Web ini dibuat khusus untukmu sebagai tempat rehat..."</p>
+                        </div>
+
+                        <!-- Milestone Beads Preview -->
+                        <div class="home-milestone-preview">
+                            <div class="home-beads-row" id="homeBeadsRow">
+                                <!-- 3 Mutiara Chapter -->
+                            </div>
+                            <div class="home-chapter-snippet" id="homeChapterSnippet">
+                                <strong id="homeChapterTitle">Chapter 1: Awal Perjalanan</strong>
+                                <p id="homeChapterDesc">Mengingat kembali langkah-langkah kecil yang membawamu sejauh ini...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Galeri Kenangan Polaroid (Preview) -->
+                    <div class="glass-card home-card-column">
+                        <div class="column-card-header">
+                            <div class="playlist-title">
+                                <iconify-icon icon="solar:camera-bold-duotone"></iconify-icon>
+                                <span>Kenangan Polaroid 📸</span>
+                            </div>
+                            <button class="view-more-link" onclick="switchTab('photos')">
+                                <span>Semua Foto</span>
+                                <iconify-icon icon="solar:arrow-right-up-bold-duotone"></iconify-icon>
+                            </button>
+                        </div>
+
+                        <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 8px;">
+                            Beberapa potret momen tenang dan bahagia yang tersimpan:
+                        </p>
+
+                        <!-- Preview Foto Grid -->
+                        <div class="home-polaroid-preview-row" id="homePolaroidPreviewRow">
+                            <!-- 2-3 Foto polaroid preview -->
+                        </div>
+
+                        <button class="home-add-photo-btn" onclick="openPhotoModal()">
+                            <iconify-icon icon="solar:camera-add-bold-duotone"></iconify-icon>
+                            <span>+ Unggah Foto Kenangan Baru</span>
+                        </button>
+                    </div>
+                </div>
+
+        </div>
+
+        <!-- TAB 2: DETAIL PLAYLIST (RUANG MUSIK LENGKAP) -->
+            <!-- ================= TAB 2: DETAIL PLAYLIST (RUANG MUSIK LENGKAP) ================= -->
+            <div class="tab-panel" id="tabMusic">
+                <div class="music-room-grid">
+
+                    <!-- Kolom Kiri: Playlist & Tambah Link YouTube -->
+                    <div class="glass-card">
+                        <div class="playlist-header-box">
+                            <div class="playlist-title">
+                                <iconify-icon icon="solar:playlist-minimalistic-bold-duotone"></iconify-icon>
+                                <span>Daftar Lagu YouTube</span>
+                            </div>
+                            <span class="ribbon-tag" id="songCountTag" style="margin: 0;">5 Lagu</span>
+                        </div>
+
+                        <!-- Form Tambah Link YouTube -->
+                        <div class="add-youtube-box">
+                            <h4>
+                                <iconify-icon icon="lucide:youtube"></iconify-icon>
+                                <span>+ Tempel Link YouTube Baru</span>
+                            </h4>
+                            <div class="youtube-input-row">
+                                <input type="text" id="ytUrlInput" class="youtube-input" placeholder="Tempel link YouTube (misal: https://youtu.be/...)" autocomplete="off">
+                                <button type="button" class="youtube-add-btn" onclick="addNewYouTubeSong()">
+                                    <span>Tambah</span>
+                                </button>
+                            </div>
+                            <input type="text" id="ytCustomTitle" class="youtube-input" placeholder="Judul lagu & artis (opsional)" autocomplete="off">
+                        </div>
+
+                        <!-- Deretan Lagu Tersimpan -->
+                        <ul class="song-list" id="songListElem">
+                            <!-- Lagu YouTube terisi dinamis -->
+                        </ul>
+                    </div>
+
+                    <!-- Kolom Kanan: Vinyl Showcase -->
+                    <div class="glass-card vinyl-showcase-card">
+                        <div class="vinyl-disc" id="vinylDisc">
+                            <div class="vinyl-label">
+                                <iconify-icon icon="solar:vinyl-bold-duotone"></iconify-icon>
+                            </div>
+                        </div>
+                        <h3 class="showcase-title" id="showcaseTitle">Wave to Earth</h3>
+                        <p class="showcase-artist" id="showcaseArtist">Pilih lagu dari daftar di sebelah</p>
+                        <p class="showcase-quote">
+                            "Musik adalah tempat singgah paling tenang saat dunia di luar sedang begitu ramai." ✨
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+
+        <!-- TAB 3: THE JOURNEY -->
+            <!-- ================= TAB 2: THE JOURNEY & SURAT ================= -->
+            <div class="tab-panel" id="tabJourney">
+                <div class="journal-container">
+                    <!-- Surat Digital -->
+                    <div class="secret-letter-box">
+                        <div class="letter-tag">
+                            <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon>
+                            <span>Surat Khusus Buat Kamu</span>
+                        </div>
+                        <p class="letter-body" id="letterBody">
+                            "Selamat bertambah usia! Ini ruang spesial untukmu: dengarkan musiknya, tambahkan foto kenanganmu, dan ingat selalu bahwa kamu sangat berharga. 🤍"
+                        </p>
+                    </div>
+
+                    <!-- Journey Milestones -->
+                    <div class="glass-card journey-stepper-box">
+                        <div class="playlist-header-box">
+                            <div class="playlist-title">
+                                <iconify-icon icon="solar:stars-minimalistic-bold-duotone"></iconify-icon>
+                                <span>The Journey & Milestones</span>
+                            </div>
+                            <span class="ribbon-tag" style="margin: 0;" id="chapterCounter">Chapter 1/3</span>
+                        </div>
+
+                        <div class="beads-chain" id="beadsChain">
+                            <!-- Butiran mutiara dinamis -->
+                        </div>
+
+                        <div class="chapter-box">
+                            <h3 class="chapter-title" id="chapterTitle">Chapter 1: Awal Perjalanan</h3>
+                            <p class="chapter-desc" id="chapterDesc">
+                                Mengingat kembali langkah-langkah kecil yang membawamu sampai sejauh ini.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- TAB 4: GALERI POLAROID -->
+            <!-- ================= TAB 3: GALERI POLAROID ================= -->
+            <div class="tab-panel" id="tabPhotos">
+                <div class="glass-card">
+                    <div class="photo-header-row">
+                        <div class="playlist-title">
+                            <iconify-icon icon="solar:gallery-minimalistic-bold-duotone"></iconify-icon>
+                            <span>Galeri Kenangan Polaroid</span>
+                        </div>
+                        <button class="add-photo-btn" onclick="openPhotoModal()">
+                            <iconify-icon icon="solar:camera-add-bold-duotone"></iconify-icon>
+                            <span>+ Tambah Foto</span>
+                        </button>
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 24px;">
+                        Setiap foto yang kamu unggah akan tersimpan abadi di ruang santai pribadimu. 📸
+                    </p>
+
+                    <div class="polaroid-grid" id="polaroidGrid">
+                        <!-- Foto Polaroid -->
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- SANCTUARY FOOTER -->
+        <footer class="sanctuary-footer">
+            <p>Dibuat sepenuh hati untuk <strong>Nisa</strong> &bull; Ruang tenang, musik, dan kenangan indah.</p>
+        </footer>
+    </div>
+
+    <!-- 3. PERSISTENT FLOATING BOTTOM PLAYER & MODALS (MODULAR) -->
+    <!-- ================= 3. PERSISTENT BOTTOM MUSIC BAR ================= -->
+    <div class="persistent-player-bar" id="persistentBar" style="display: none;">
+        <div class="player-left">
+            <img src="https://img.youtube.com/vi/6Pt_JzS9r6U/mqdefault.jpg" id="barThumb" class="player-thumb" alt="Thumbnail">
+            <div class="player-info">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <h4 id="barTitle">Seasons</h4>
+                    <div class="soundwave-bars" id="barSoundwave">
+                        <span class="eq-bar bar-1"></span>
+                        <span class="eq-bar bar-2"></span>
+                        <span class="eq-bar bar-3"></span>
+                        <span class="eq-bar bar-4"></span>
+                        <span class="eq-bar bar-5"></span>
+                    </div>
+                </div>
+                <span id="barArtist">Wave to Earth</span>
+            </div>
+        </div>
+
+        <div class="player-center">
+            <div class="player-buttons">
+                <button class="ctrl-btn" onclick="prevSong()" title="Lagu Sebelumnya">
+                    <iconify-icon icon="solar:skip-previous-bold-duotone"></iconify-icon>
+                </button>
+                <button class="play-pause-circle" id="barPlayBtn" onclick="togglePlayPause()" title="Putar / Jeda">
+                    <iconify-icon icon="solar:play-bold" id="barPlayIcon"></iconify-icon>
+                </button>
+                <button class="ctrl-btn" onclick="nextSong()" title="Lagu Berikutnya">
+                    <iconify-icon icon="solar:skip-next-bold-duotone"></iconify-icon>
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <span id="currentTimeText">0:00</span>
+                <div class="progress-bar-bg" id="progressBarBg" onclick="seekSong(event)">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <span id="durationText">0:00</span>
+            </div>
+        </div>
+
+        <div class="player-right">
+            <iconify-icon icon="solar:volume-loud-bold-duotone" class="volume-icon"></iconify-icon>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80" oninput="changeVolume(this.value)">
+            <button type="button" class="player-dismiss-btn" onclick="dismissPlayerBar()" title="Tutup Pemutar Musik">
+                <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Buat Playlist Baru (Judul + Link Terhubung Riil & Otomatis) -->
+    <div class="modal-overlay" id="newPlaylistModal">
+        <div class="modal-box" style="max-width: 440px;">
+            <h3 class="modal-title">
+                <iconify-icon icon="solar:folder-with-files-bold-duotone" style="color: var(--accent-main); vertical-align: middle; margin-right: 6px;"></iconify-icon>
+                <span>Buat Playlist Baru</span>
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px;">
+                Cukup masukkan judul dan link lagu (YouTube / Spotify). Thumbnail dan lagu akan otomatis terhubung! 🎵
+            </p>
+
+            <div class="form-row">
+                <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-title); display: block; margin-bottom: 6px;">Judul Playlist</label>
+                <input type="text" id="modalPlNameInput" class="form-input" placeholder="Misal: Sunset & Chill, Lagu Favorit..." autocomplete="off">
+            </div>
+
+            <div class="form-row">
+                <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-title); display: block; margin-bottom: 6px;">Link Musik (YouTube atau Spotify)</label>
+                <input type="text" id="modalPlMusicUrlInput" class="form-input" placeholder="Tempel link YouTube atau Spotify (https://...)" oninput="handleAutoDetectPlaylistLink(this.value)" autocomplete="off">
+            </div>
+
+            <!-- Auto Thumbnail Card (Terdeteksi Otomatis dari Link) -->
+            <div id="autoThumbnailPreviewWrap" class="auto-thumbnail-card" style="display: none;">
+                <img id="autoPlCoverPreviewImg" src="" alt="Thumbnail Otomatis" class="auto-thumb-img">
+                <div class="auto-thumb-meta">
+                    <span id="autoDetectedSourceBadge" class="auto-thumb-badge youtube">
+                        <iconify-icon icon="solar:check-circle-bold"></iconify-icon> Thumbnail Otomatis
+                    </span>
+                    <div id="autoDetectedTitleText" class="auto-thumb-title">Memuat info musik...</div>
+                    <div class="auto-thumb-hint">✓ Sampul & lagu langsung terhubung ke playlist</div>
+                </div>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 18px;">
+                <button type="button" class="btn-cancel" onclick="closeNewPlaylistModal()">Batal</button>
+                <button type="button" class="btn-save" onclick="createNewPlaylist()">Buat Playlist ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Lagu YouTube -->
+    <div class="modal-overlay" id="addSongModal">
+        <div class="modal-box">
+            <h3 class="modal-title">
+                <iconify-icon icon="lucide:youtube" style="color: #ef4444; vertical-align: middle; margin-right: 6px;"></iconify-icon>
+                <span>Tambah Lagu YouTube</span>
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px;">
+                Tempel link YouTube favoritmu untuk ditambahkan ke dalam playlist.
+            </p>
+
+            <div class="form-row">
+                <label>Pilih Playlist Tujuan</label>
+                <select id="modalTargetPlaylistSelect" class="form-input" style="padding: 11px 14px; cursor: pointer;">
+                    <!-- Option playlist dinamis -->
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Link YouTube</label>
+                <input type="text" id="modalYtUrlInput" class="form-input" placeholder="https://youtu.be/... atau https://www.youtube.com/watch?v=..." autocomplete="off">
+            </div>
+
+            <div class="form-row">
+                <label>Judul Lagu & Artis (Opsional)</label>
+                <input type="text" id="modalYtTitleInput" class="form-input" placeholder="Misal: Wave to Earth - Seasons" autocomplete="off">
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeAddSongModal()">Batal</button>
+                <button type="button" class="btn-save" onclick="addSongFromModal()">Tambahkan ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload Foto (Aesthetic Polaroid Studio) -->
+    <div class="modal-overlay" id="photoModal">
+        <div class="modal-box modal-polaroid-box">
+            <h3 class="modal-title">
+                <iconify-icon icon="solar:camera-bold-duotone" style="color: var(--accent-main); vertical-align: middle; margin-right: 6px;"></iconify-icon>
+                <span>Abadikan Foto Kenangan</span>
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 12px;">
+                Pilih fotomu dan lihat preview polaroid manisnya langsung di bawah ✨
+            </p>
+
+            <!-- Polaroid Live Preview Card -->
+            <div class="polaroid-upload-frame" onclick="triggerPhotoFileInput()">
+                <div class="polaroid-washi-tape"></div>
+                <div class="polaroid-dropzone" id="polaroidDropzone">
+                    <img id="polaroidLivePreview" src="" alt="Preview" style="display: none;">
+                    <div class="polaroid-placeholder" id="polaroidPlaceholder">
+                        <iconify-icon icon="solar:gallery-add-bold-duotone" class="polaroid-upload-icon"></iconify-icon>
+                        <strong>Ketuk untuk Pilih Foto</strong>
+                        <span>Format JPG, PNG, atau GIF</span>
+                    </div>
+                </div>
+                <input type="file" id="modalFileInput" accept="image/*" style="display: none;" onchange="handlePhotoSelect(event)">
+            </div>
+
+            <div class="form-row">
+                <label>Catatan / Cerita Singkat 💌</label>
+                <input type="text" id="modalCaptionInput" class="form-input" placeholder="Tuliskan cerita manis tentang foto ini..." autocomplete="off" required>
+            </div>
+
+            <div class="form-row">
+                <label>Tanggal Momen 📅</label>
+                <input type="date" id="modalDateInput" class="form-input">
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closePhotoModal()">Batal</button>
+                <button type="button" class="btn-save" onclick="saveNewPhoto()">Simpan ke Kenangan 🌸</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Fokus & Balik Foto Polaroid 3D (Interactive Tactile Item) -->
+    <div class="modal-overlay polaroid-focus-overlay" id="polaroidFocusModal" onclick="handlePolaroidBackdropClick(event)">
+        <div class="polaroid-focus-container">
+            <!-- Hint Pengguna -->
+            <div class="polaroid-focus-hint-badge" onclick="togglePolaroidFlip(event)">
+                <iconify-icon icon="solar:restart-bold"></iconify-icon>
+                <span>Ketuk foto untuk membalik & baca catatan di belakang 💌</span>
+            </div>
+
+            <button type="button" class="polaroid-focus-close-btn" onclick="closePolaroidFocus()" title="Tutup">
+                <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+            </button>
+
+            <!-- 3D Flip Card Container -->
+            <div class="polaroid-3d-scene" onclick="togglePolaroidFlip(event)">
+                <div class="polaroid-3d-card" id="polaroid3dCard">
+                    <!-- SISI DEPAN: FOTO POLAROID ASLI -->
+                    <div class="polaroid-side polaroid-front">
+                        <div class="polaroid-focus-tape"></div>
+                        <div class="polaroid-front-img-wrap">
+                            <img id="focusPolaroidImg" src="" alt="Polaroid Foto">
+                        </div>
+                        <div class="polaroid-front-meta">
+                            <h3 id="focusPolaroidCaption" class="polaroid-front-title">Kenangan</h3>
+                            <div class="polaroid-front-date-row">
+                                <span id="focusPolaroidDate" class="polaroid-front-date">2026-11-25</span>
+                                <span class="polaroid-flip-indicator">
+                                    <iconify-icon icon="solar:restart-bold"></iconify-icon> Balik Foto ↺
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SISI BELAKANG: CATATAN SURAT & CAP VINTAGE -->
+                    <div class="polaroid-side polaroid-back">
+                        <div class="polaroid-back-inner">
+                            <div class="polaroid-stamp-box">
+                                <span class="stamp-circle">
+                                    <iconify-icon icon="solar:heart-bold"></iconify-icon>
+                                </span>
+                                <div class="stamp-meta">
+                                    <strong>SANCTUARY ARCHIVE</strong>
+                                    <span id="focusPolaroidBackDateStamp">2026-11-25</span>
+                                </div>
+                            </div>
+
+                            <div class="polaroid-back-note-area">
+                                <div class="note-label">
+                                    <iconify-icon icon="solar:pen-new-square-bold-duotone"></iconify-icon>
+                                    <span>Catatan di Balik Foto:</span>
+                                </div>
+                                <blockquote id="focusPolaroidBackNote" class="polaroid-back-quote">
+                                    "Kenangan manis yang selalu hangat di hati..."
+                                </blockquote>
+                            </div>
+
+                            <div class="polaroid-back-footer">
+                                <p class="sweet-reminder">
+                                    "Setiap momen indah tersimpan abadi di ruang santai ini." 🌸
+                                </p>
+                                <span class="polaroid-flip-indicator back-indicator">
+                                    <iconify-icon icon="solar:restart-bold"></iconify-icon> Balik ke Depan ↻
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modular JavaScript Scripts -->
+    <script src="public/js/app.js"></script>
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/player.js"></script>
+    <script src="public/js/playlist.js"></script>
+    <script src="public/js/journey.js"></script>
+    <script src="public/js/photos.js"></script>
+</body>
+</html>

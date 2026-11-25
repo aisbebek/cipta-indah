@@ -1,0 +1,209 @@
+        /* ================= MODE TERANG & GELAP NETRAL ================= */
+        /* 1. Light Mode (Netral, Bersih, Modern) */
+        :root, html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-gradient: radial-gradient(circle at 50% 10%, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%);
+            --card-bg: #ffffff;
+            --card-border: rgba(226, 232, 240, 0.85);
+            --card-shadow: 0 10px 30px -5px rgba(30, 41, 59, 0.05);
+            --text-title: #0f172a;
+            --text-body: #334155;
+            --text-dim: #64748b;
+            --accent-main: #2563eb;
+            --accent-glow: #60a5fa;
+            --accent-light: #eff6ff;
+            --badge-bg: rgba(37, 99, 235, 0.1);
+            --tape-color: rgba(191, 219, 254, 0.6);
+            --player-bg: #ffffff;
+            --orb-color: #e2e8f0;
+        }
+
+        /* 2. Dark Mode (Tenang, Teduh, Nyaman di Mata) */
+        html[data-theme="dark"] {
+            --bg-page: #0b0f17;
+            --bg-gradient: radial-gradient(circle at 50% 10%, #131c2d 0%, #0b0f17 70%, #06090e 100%);
+            --card-bg: #111827;
+            --card-border: rgba(51, 65, 85, 0.65);
+            --card-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65);
+            --text-title: #f8fafc;
+            --text-body: #cbd5e1;
+            --text-dim: #64748b;
+            --accent-main: #38bdf8;
+            --accent-glow: #0284c7;
+            --accent-light: rgba(56, 189, 248, 0.14);
+            --badge-bg: rgba(56, 189, 248, 0.12);
+            --tape-color: rgba(56, 189, 248, 0.3);
+            --player-bg: #0f172a;
+            --orb-color: #1e293b;
+        }
+
+        /* ================= BASE STYLES ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text-body);
+            background: var(--bg-page);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            transition: background 0.35s ease, color 0.35s ease;
+            padding-bottom: 90px;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(95px);
+            opacity: 0.55;
+            transition: all 0.5s ease;
+        }
+
+        .ambient-1 {
+            width: 480px;
+            height: 480px;
+            top: -100px;
+            right: 5%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+        }
+
+        .ambient-2 {
+            width: 520px;
+            height: 520px;
+            bottom: 40px;
+            left: -80px;
+            background: radial-gradient(circle, var(--orb-color) 0%, transparent 70%);
+        }
+
+        .page-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 24px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+
+        /* Canvas Interactive Bubbles Background */
+        #bubbleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.65;
+        }
+
+        #mainDashboard,
+        .dashboard-container,
+        .page-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 24px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-symbol {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            color: var(--accent-main);
+        }
+
+        .brand-text h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.18rem;
+            color: var(--text-title);
+            font-weight: 700;
+        }
+
+        .brand-text span {
+            font-size: 0.72rem;
+            color: var(--accent-main);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* ================= SANCTUARY FOOTER ================= */
+        .sanctuary-footer {
+            text-align: center;
+            padding: 40px 20px 120px;
+            margin-top: 50px;
+            border-top: 1px dashed var(--card-border);
+            position: relative;
+            z-index: 10;
+        }
+        .footer-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-heart-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .footer-main-text {
+            font-size: 0.92rem;
+            color: var(--text-title);
+            margin: 0;
+        }
+        .footer-main-text strong {
+            color: var(--accent-main);
+            font-weight: 700;
+        }
+        .footer-sub-text {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin: 0;
+            line-height: 1.5;
+        }

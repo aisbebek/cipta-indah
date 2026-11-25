@@ -1,0 +1,137 @@
+        /* Modal Add Photo */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: var(--card-shadow);
+        }
+
+        .modal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-title);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .form-row {
+            margin-bottom: 14px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: var(--accent-main);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        #hiddenYtPlayer {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            pointer-events: none;
+        }
+
+
+        /* Avatar Picker in Profile Modal */
+        .avatar-presets-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0 16px;
+            flex-wrap: wrap;
+        }
+        .avatar-preset-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            padding: 2px;
+            background: var(--card-bg);
+        }
+        .avatar-preset-item:hover,
+        .avatar-preset-item.selected {
+            border-color: var(--accent-main);
+            transform: scale(1.12);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .avatar-preset-item img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .custom-avatar-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.76rem;
+            padding: 6px 14px;
+            border-radius: 50px;
+            background: var(--accent-light);
+            border: 1px dashed var(--accent-main);
+            color: var(--accent-main);
+            cursor: pointer;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+    
